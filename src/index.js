@@ -4,6 +4,7 @@ import cors from 'cors';
 
 const app = express();
 app.use(cors());
+app.use(express.json());
 
 app.get('/matricula', async (req, resp) => {
     try {
@@ -16,18 +17,14 @@ app.get('/matricula', async (req, resp) => {
 
 app.post('/matricula', async (req, resp) => {
     try {
-        let nome = req.body.nome;
-        let chamada = req.body.chamada;
-        let curso = req.body.curso;
-        let turma = req.body.turma;
-        let criar = await db.tb_matricula.create({
-            where:{
-                nm_aluno: nome,
-                nr_chamada: chamada,
-                nm_curso: curso,
-                nm_turma: turma
-            }});
-        resp.send(criar);
+        let aluno = {
+            nm_aluno: req.body.nome,
+            nr_chamada: req.body.chamada,
+            nm_curso: req.body.curso,
+            nm_turma: req.body.turma
+        }
+        let criar = await db.tb_matricula.create(aluno);
+         resp.send(criar);
     } catch (e) {
         resp.send(e.toString());
     }
@@ -42,7 +39,7 @@ app.put('/matricula/:id', async (req, resp) => {
         nm_curso: req.body.curso,
         nm_turma: req.body.turma
     }
-    let editar = await db.tb_matricula.update(info);
+    let editar = await db.tb_matricula.update({info});
     resp.sendStatus(200);
 });
 
