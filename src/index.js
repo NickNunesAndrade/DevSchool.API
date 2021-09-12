@@ -11,16 +11,14 @@ app.get('/matricula', async (req, resp) => {
         let ler = await db.tb_matricula.findAll({order: [["id_matricula", "desc"]]});
         resp.send(ler);
     } catch (e) {
-        resp.send(e.toString());
+        resp.send({ erro: e.toString() });
     }
 });
 
 app.post('/matricula', async (req, resp) => {
     try {
-        let nome = req.body.nome;
-        let chamada = Number(req.body.chamada);
-        let curso = req.body.curso;
-        let turma = req.body.turma;
+        let {nome, chamada, curso, turma} = req.body;
+
         let criar = await db.tb_matricula.create({
             nm_aluno: nome,
             nr_chamada: chamada,
@@ -37,10 +35,8 @@ app.post('/matricula', async (req, resp) => {
 app.put('/matricula/:id', async (req, resp) => {
     try {
         let id = req.params.id;
-        let nome = req.body.nome;
-        let chamada = Number(req.body.chamada);
-        let curso = req.body.curso;
-        let turma = req.body.turma;
+        let {nome, chamada, curso, turma} = req.body;
+        
         let editar = await db.tb_matricula.update({
             nm_aluno: nome,
             nr_chamada: chamada,
@@ -50,17 +46,8 @@ app.put('/matricula/:id', async (req, resp) => {
         {
             where: {id_matricula: id}
         });
-        if(nome == "" || nome == null) {
-            resp.send("Campo nome e obrigatorio para fazer sua alteracao!!");
-        } else if (chamada == "" || chamada == null) {
-            resp.send("Campo chamada e obrigatorio para fazer sua alteracao!!");
-        } else if (curso == "" ||curso == null) {
-            resp.send("Campo curso e obrigatorio para fazer sua alteracao!!");
-        } else if (turma == "" || turma == null) {
-            resp.send("Campo turma e obrigatorio para fazer sua alteracao!!")
-        } else {
-            resp.sendStatus(200);
-        }
+        resp.sendStatus(200);
+        
     } catch (e) {
         resp.send({erro: e.toString()});
     }
