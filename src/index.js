@@ -19,14 +19,31 @@ app.post('/matricula', async (req, resp) => {
     try {
         let {nome, chamada, curso, turma} = req.body;
 
-        let criar = await db.tb_matricula.create({
-            nm_aluno: nome,
-            nr_chamada: chamada,
-            nm_curso: curso,
-            nm_turma: turma
-        });
+        let verificar = await db.tb_matricula.findOne( { where: { nr_chamada: chamada, nm_turma: turma } } );
+        if(verificar != null) {
+            resp.send({error: 'Aluno ja cadastrado !!'});
+        } else {
+            let criar = await db.tb_matricula.create({
+                nm_aluno: nome,
+                nr_chamada: chamada,
+                nm_curso: curso,
+                nm_turma: turma
+            });
 
-        resp.send(criar);
+            if(nome == "") {
+                resp.send('O campo nome e obrigatorio !!');
+            } else if(chamada == "") {
+                resp.send('O campo chamada e obrigatorio !!');
+            } else if(curso == "") {
+                resp.send('O campo curso e obrigatorio !!');
+            } else if(turma == "") {
+                resp.send('O campo turma e obrigatorio !!');
+            } else if(chamada <= 0) {
+                resp.send('A chamada nao pode ser negativa');
+            } else {
+                resp.send(criar);
+            }
+        }
     } catch (e) {
         resp.send(e.toString());
     }
