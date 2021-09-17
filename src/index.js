@@ -3,8 +3,8 @@ import express from 'express';
 import cors from 'cors';
 
 const app = express();
-app.use(cors());
-app.use(express.json());
+app.use( cors() );
+app.use( express.json() );
 
 app.get('/matricula', async (req, resp) => {
     try {
@@ -30,13 +30,13 @@ app.post('/matricula', async (req, resp) => {
                 nm_turma: turma
             });
 
-            if(nome == "") {
+            if(nome === "") {
                 resp.send('O campo nome e obrigatorio !!');
-            } else if(chamada == "") {
+            } else if(chamada === "") {
                 resp.send('O campo chamada e obrigatorio !!');
-            } else if(curso == "") {
+            } else if(curso === "") {
                 resp.send('O campo curso e obrigatorio !!');
-            } else if(turma == "") {
+            } else if(turma === "") {
                 resp.send('O campo turma e obrigatorio !!');
             } else if(chamada <= 0) {
                 resp.send('A chamada nao pode ser negativa');
@@ -81,4 +81,4 @@ app.delete('/matricula/:id', async (req, resp) => {
 });
 
 app.listen(process.env.PORT, 
-    x => console.log(`Subiiuu!! ${process.env.PORT}`));
+    x => console.log(`Subiuuu !! ${process.env.PORT}`));
